@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#FBFAF6">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="抄經功課">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%23FBFAF6'/%3E%3Crect x='38' y='38' width='104' height='104' rx='12' fill='none' stroke='%23A8402E' stroke-width='10'/%3E%3Ctext x='90' y='118' text-anchor='middle' font-size='72' font-family='serif' fill='%23A8402E'%3E經%3C/text%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>抄經功課 · 大悲咒 × 往生咒</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: light only;
+  --paper:#FBFAF6;
+  --paper-2:#F1EDE2;
+  --paper-3:#DFD8C6;
+  --card:#FFFFFF;
+  --ink:#2E2A22;
+  --ink-soft:#5C5344;
+  --ink-faint:#8A8070;
+  --cinnabar:#A8402E;
+  --cinnabar-deep:#8A2F20;
+  --gold:#A9822F;
+  --gold-deep:#8C6A22;
+  --lotus:#D9909B;
+  --lotus-deep:#C06B7A;
+  --leaf:#6E7F5C;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--paper);min-height:100%;overscroll-behavior:none}
+body{min-height:100vh}
+body{
+  font-family:'Noto Serif TC','Songti TC','PMingLiU',serif;
+  background:var(--paper);
+  color:var(--ink);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 27px, rgba(50,42,32,.025) 27px 28px);
+  max-width:520px;margin:0 auto;
+  padding:18px 16px 90px;
+  line-height:1.5;
+}
+/* ---------- 頁首 ---------- */
+header{text-align:center;margin-bottom:18px;position:relative}
+.h-eyebrow{font-size:12px;letter-spacing:.5em;color:var(--ink-faint);text-indent:.5em}
+h1{font-size:30px;font-weight:900;letter-spacing:.18em;text-indent:.18em;margin:2px 0 6px}
+.countdown{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:13px;color:var(--ink-soft);
+  border-top:1px solid var(--paper-3);border-bottom:1px solid var(--paper-3);
+  padding:5px 14px;
+}
+.countdown b{color:var(--cinnabar);font-size:17px;font-weight:700}
+/* ---------- 經文卡 ---------- */
+.sutra{
+  background:var(--card);
+  border:1px solid var(--paper-3);
+  border-radius:8px;
+  padding:16px 16px 14px;
+  margin-bottom:14px;
+  box-shadow:0 1px 0 rgba(50,42,32,.06);
+  position:relative;overflow:hidden;
+}
+.sutra::before{ /* 側邊硃線，仿經摺裝 */
+  content:"";position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--accent,var(--cinnabar));opacity:.85;
+}
+.sutra-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.sutra-name{font-size:20px;font-weight:700;letter-spacing:.12em}
+.sutra-name small{font-size:11px;color:var(--ink-faint);letter-spacing:.15em;margin-left:8px;font-weight:400}
+.sutra-count{font-size:14px;color:var(--ink-soft)}
+.sutra-count b{font-size:24px;font-weight:900;color:var(--accent,var(--cinnabar))}
+/* 墨條進度 */
+.bar{
+  height:12px;background:var(--paper-2);border-radius:99px;overflow:hidden;
+  border:1px solid var(--paper-3);
+}
+.bar-fill{
+  height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent-deep,var(--cinnabar-deep)),var(--accent,var(--cinnabar)) 70%);
+  transition:width .9s cubic-bezier(.22,1,.36,1);
+  position:relative;
+}
+.bar-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent 55%)}
+.sutra-stats{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--ink-soft)}
+.need{font-size:13px}
+.need b{font-size:19px;font-weight:900;color:var(--ink)}
+.need.done-txt{color:var(--gold-deep);font-weight:700}
+/* 九品蓮台 */
+.lotus-row{
+  display:flex;justify-content:space-between;margin-top:12px;padding-top:10px;
+  border-top:1px dashed var(--paper-3);
+}
+.lotus-label{font-size:10px;color:var(--ink-faint);letter-spacing:.3em;writing-mode:horizontal-tb;align-self:center;margin-right:4px}
+.lotus{width:26px;height:26px;flex:0 0 auto}
+.lotus svg{width:100%;height:100%;display:block}
+.lotus .petal{fill:#E3DCC9;stroke:#B7AB8F;stroke-width:1;transition:fill .6s}
+.lotus .core{fill:#CFC3A5;stroke:#B7AB8F;stroke-width:1;transition:fill .6s}
+.lotus.bloom .petal{fill:var(--lotus)}
+.lotus.bloom .petal.inner{fill:var(--lotus-deep)}
+.lotus.bloom .core{fill:#F0C25E}
+.lotus.bloom{animation:bloomPop .7s cubic-bezier(.34,1.56,.64,1)}
+@keyframes bloomPop{0%{transform:scale(.4);opacity:.3}100%{transform:scale(1);opacity:1}}
+/* ---------- 記錄輸入 ---------- */
+.section-title{
+  display:flex;align-items:center;gap:10px;
+  font-size:13px;letter-spacing:.4em;text-indent:.4em;color:var(--ink-soft);
+  margin:22px 0 10px;justify-content:center;
+}
+.section-title::before,.section-title::after{content:"";flex:1;height:1px;background:var(--paper-3)}
+.entry-card.flash{box-shadow:0 0 0 3px rgba(168,64,46,.35)}
+.entry-card{
+  background:var(--card);border:1px solid var(--paper-3);border-radius:8px;
+  padding:16px;box-shadow:0 1px 0 rgba(50,42,32,.06);
+  transition:box-shadow .3s;
+}
+.date-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.date-row label{font-size:14px;color:var(--ink-soft);letter-spacing:.2em}
+input[type=date]{
+  font-family:inherit;font-size:15px;color:var(--ink);
+  background:var(--paper);border:1px solid var(--paper-3);border-radius:4px;
+  padding:7px 10px;
+}
+.stepper-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.stepper-row .name{font-size:16px;font-weight:600;letter-spacing:.1em}
+.stepper-row .name::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;background:var(--dot)}
+.stepper{display:flex;align-items:center;gap:0;border:1px solid var(--paper-3);border-radius:6px;overflow:hidden;background:var(--paper)}
+.stepper button{
+  width:46px;height:46px;border:none;background:var(--paper-2);color:var(--ink);
+  font-size:24px;font-family:inherit;cursor:pointer;line-height:1;
+}
+.stepper button:active{background:var(--paper-3)}
+.stepper input{
+  width:58px;height:46px;border:none;background:transparent;text-align:center;
+  font-family:inherit;font-size:20px;font-weight:700;color:var(--ink);
+}
+.stepper input:focus{outline:none}
+.save-btn{
+  width:100%;margin-top:6px;padding:15px;border:none;border-radius:6px;cursor:pointer;
+  background:linear-gradient(180deg,var(--cinnabar),var(--cinnabar-deep));
+  color:#FBF4E4;font-family:inherit;font-size:17px;font-weight:700;letter-spacing:.5em;text-indent:.5em;
+  box-shadow:0 3px 8px rgba(138,47,32,.30);
+  transition:transform .12s;
+}
+.save-btn:active{transform:scale(.98)}
+.hint{font-size:12px;color:var(--ink-faint);text-align:center;margin-top:10px}
+.del-btn{
+  display:none;width:100%;margin-top:10px;padding:10px;border-radius:6px;cursor:pointer;
+  border:1px solid var(--paper-3);background:transparent;color:var(--ink-faint);
+  font-family:inherit;font-size:13px;letter-spacing:.2em;text-indent:.2em;
+}
+.del-btn.show{display:block}
+.backup{margin-top:10px}
+.backup-btns{display:flex;gap:10px}
+.backup-btns button{
+  flex:1;padding:11px;border-radius:6px;cursor:pointer;font-family:inherit;font-size:13px;
+  border:1px solid var(--paper-3);background:var(--paper-2);color:var(--ink-soft);letter-spacing:.1em;
+}
+.backup textarea{
+  width:100%;margin-top:10px;padding:10px;border:1px solid var(--paper-3);border-radius:6px;
+  background:var(--paper);font-family:monospace;font-size:11px;color:var(--ink-soft);
+  min-height:72px;display:none;
+}
+.backup textarea.show{display:block}
+.backup .hint{margin-top:6px}
+/* ---------- 記錄列表 ---------- */
+.log{list-style:none}
+.log li{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--card);border:1px solid var(--paper-3);border-radius:8px;
+  padding:10px 14px;margin-bottom:8px;font-size:14px;cursor:pointer;
+}
+.log li:active{background:var(--paper-2)}
+.log .d{color:var(--ink-soft);letter-spacing:.05em}
+.log .d small{color:var(--ink-faint);margin-left:6px}
+.log .n{display:flex;gap:14px}
+.log .n span b{font-weight:700}
+.log .n .c1 b{color:var(--cinnabar)}
+.log .n .c2 b{color:var(--gold-deep)}
+.log-empty{text-align:center;color:var(--ink-faint);font-size:13px;padding:14px}
+/* ---------- 獎勵畫面 ---------- */
+.reward{
+  position:fixed;inset:0;z-index:50;display:none;
+  align-items:center;justify-content:center;flex-direction:column;
+  background:rgba(50,42,32,.55);backdrop-filter:blur(3px);
+}
+.reward.show{display:flex}
+.reward-card{
+  background:var(--paper);border-radius:10px;padding:34px 30px 28px;
+  width:min(320px,84vw);text-align:center;position:relative;
+  border:1px solid var(--paper-3);
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  animation:cardIn .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes cardIn{0%{transform:scale(.7) translateY(30px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
+.seal{
+  width:92px;height:92px;margin:0 auto 16px;border-radius:10px;
+  border:4px solid var(--cinnabar);color:var(--cinnabar);
+  display:flex;align-items:center;justify-content:center;
+  font-size:34px;font-weight:900;letter-spacing:.1em;line-height:1.15;
+  transform:rotate(-6deg);
+  animation:stamp .55s cubic-bezier(.34,1.8,.64,1) .15s backwards;
+  writing-mode:vertical-rl;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(168,64,46,.08), transparent 60%);
+}
+@keyframes stamp{0%{transform:rotate(-6deg) scale(2.4);opacity:0}60%{transform:rotate(-6deg) scale(.94);opacity:1}100%{transform:rotate(-6deg) scale(1)}}
+.reward-title{font-size:21px;font-weight:900;letter-spacing:.2em;margin-bottom:8px}
+.reward-msg{font-size:14px;color:var(--ink-soft);white-space:pre-line;margin-bottom:6px}
+.reward-sub{font-size:12px;color:var(--ink-faint)}
+.reward-close{
+  margin-top:18px;padding:11px 34px;border:1px solid var(--paper-3);border-radius:99px;
+  background:var(--paper-2);color:var(--ink);font-family:inherit;font-size:14px;
+  letter-spacing:.3em;text-indent:.3em;cursor:pointer;
+}
+.petal{
+  position:fixed;top:-30px;z-index:51;pointer-events:none;
+  font-size:22px;animation:fall linear forwards;
+}
+@keyframes fall{
+  0%{transform:translateY(-5vh) rotate(0deg);opacity:1}
+  90%{opacity:1}
+  100%{transform:translateY(108vh) rotate(320deg);opacity:0}
+}
+.reward.grand .reward-card{background:linear-gradient(180deg,#FBF3DC,var(--paper))}
+.reward.grand .seal{border-color:var(--gold-deep);color:var(--gold-deep);box-shadow:0 0 40px rgba(169,130,47,.5)}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-eyebrow">恭敬書寫 · 一字一佛</div>
+  <h1>抄經功課</h1>
+  <div class="countdown" id="countdown"></div>
+</header>
+
+<!-- 大悲咒 -->
+<div class="sutra" style="--accent:var(--cinnabar);--accent-deep:var(--cinnabar-deep)">
+  <div class="sutra-top">
+    <div class="sutra-name">大悲咒<small>目標 81 遍</small></div>
+    <div class="sutra-count"><b id="db-total">0</b> / 81</div>
+  </div>
+  <div class="bar"><div class="bar-fill" id="db-bar"></div></div>
+  <div class="sutra-stats">
+    <span id="db-remain">尚餘 81 遍</span>
+    <span class="need" id="db-need"></span>
+  </div>
+  <div class="lotus-row" id="db-lotus"><span class="lotus-label">九品蓮台</span></div>
+</div>
+
+<!-- 往生咒 -->
+<div class="sutra" style="--accent:var(--gold);--accent-deep:var(--gold-deep)">
+  <div class="sutra-top">
+    <div class="sutra-name">往生咒<small>目標 81 遍</small></div>
+    <div class="sutra-count"><b id="ws-total">0</b> / 81</div>
+  </div>
+  <div class="bar"><div class="bar-fill" id="ws-bar"></div></div>
+  <div class="sutra-stats">
+    <span id="ws-remain">尚餘 81 遍</span>
+    <span class="need" id="ws-need"></span>
+  </div>
+  <div class="lotus-row" id="ws-lotus"><span class="lotus-label">九品蓮台</span></div>
+</div>
+
+<!-- 今日記錄 -->
+<div class="section-title">記錄功課</div>
+<div class="entry-card">
+  <div class="date-row">
+    <label>日期</label>
+    <input type="date" id="entry-date">
+  </div>
+  <div class="stepper-row" style="--dot:var(--cinnabar)">
+    <span class="name">大悲咒</span>
+    <div class="stepper">
+      <button type="button" data-t="db" data-d="-1">−</button>
+      <input type="number" id="in-db" min="0" inputmode="numeric" value="0">
+      <button type="button" data-t="db" data-d="1">＋</button>
+    </div>
+  </div>
+  <div class="stepper-row" style="--dot:var(--gold)">
+    <span class="name">往生咒</span>
+    <div class="stepper">
+      <button type="button" data-t="ws" data-d="-1">−</button>
+      <input type="number" id="in-ws" min="0" inputmode="numeric" value="0">
+      <button type="button" data-t="ws" data-d="1">＋</button>
+    </div>
+  </div>
+  <button class="save-btn" id="save">記錄今日功課</button>
+  <button class="del-btn" id="del">刪除這一天的紀錄</button>
+  <div class="hint">同一天可重複儲存，會直接覆蓋當日紀錄；點下方任一筆紀錄可修改。</div>
+  <div class="hint" id="save-state" style="color:var(--cinnabar)"></div>
+</div>
+
+<!-- 記錄 -->
+<div class="section-title">抄經記錄</div>
+<ul class="log" id="log"></ul>
+
+<!-- 備份與還原 -->
+<div class="section-title">備份與還原</div>
+<div class="entry-card backup">
+  <div class="backup-btns">
+    <button type="button" id="bk-copy">複製備份碼</button>
+    <button type="button" id="bk-restore">貼上還原</button>
+  </div>
+  <textarea id="bk-text" placeholder="備份碼會顯示在這裡；還原時請把備份碼貼進來再按「貼上還原」。"></textarea>
+  <div class="hint" id="bk-hint">若雲端儲存不穩定，可定期複製備份碼保存（例如貼到備忘錄），之後隨時可還原。</div>
+</div>
+
+<!-- 獎勵畫面 -->
+<div class="reward" id="reward">
+  <div class="reward-card">
+    <div class="seal" id="seal">精進</div>
+    <div class="reward-title" id="r-title">功課圓滿</div>
+    <div class="reward-msg" id="r-msg"></div>
+    <div class="reward-sub" id="r-sub"></div>
+    <button class="reward-close" id="r-close">回向</button>
+  </div>
+</div>
+
+<script>
+const TARGET = 81;
+const DEADLINE = "2026-07-26";           // 含當日
+const KEY = "sutra-tracker-v1";
+const SEED = { "2026-07-02":{db:3,ws:3}, "2026-07-03":{db:3,ws:3} };
+
+let data = { entries: {} };
+
+/* ---------- 工具 ---------- */
+const $ = id => document.getElementById(id);
+const todayStr = () => {
+  const d = new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+};
+const daysLeft = () => {
+  const t = new Date(todayStr()+"T00:00:00");
+  const dl = new Date(DEADLINE+"T00:00:00");
+  return Math.floor((dl - t)/86400000) + 1;   // 含今天
+};
+const totals = () => {
+  let db=0, ws=0;
+  for (const k in data.entries){ db += data.entries[k].db||0; ws += data.entries[k].ws||0; }
+  return {db,ws};
+};
+
+/* ---------- 儲存（含自動重試） ---------- */
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+let pendingSave = false;
+
+async function load(){
+  for (let i=0;i<3;i++){
+    try{
+      const r = await window.storage.get(KEY, false);
+      if (r && r.value) { data = JSON.parse(r.value); return; }
+      break; // 讀取成功但無資料 → 用種子資料
+    }catch(e){
+      // 可能是尚無資料（key 不存在），也可能是暫時性錯誤 → 稍等再試
+      await sleep(500);
+    }
+  }
+  data = { entries: {...SEED} };
+  save();
+}
+async function save(){
+  for (let i=0;i<4;i++){
+    try{
+      const r = await window.storage.set(KEY, JSON.stringify(data), false);
+      if (r){ pendingSave = false; setSaveState("ok"); return true; }
+    }catch(e){ /* 暫時性失敗，重試 */ }
+    await sleep(600 * (i+1));
+  }
+  pendingSave = true;
+  setSaveState("pending");
+  return false;
+}
+// 若曾儲存失敗，於背景每 10 秒重試一次
+setInterval(()=>{ if (pendingSave) save(); }, 10000);
+function setSaveState(s){
+  const el = $("save-state");
+  if (!el) return;
+  el.textContent = s!=="pending" ? "" :
+    (hasCloud ? "⚠ 雲端儲存暫時失敗，資料已暫存於本頁，將自動重試"
+              : "⚠ 本機儲存失敗，請用下方「複製備份碼」保存資料");
+}
+
+/* ---------- 蓮花 ---------- */
+function lotusSVG(){
+  return `<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <path class="petal" d="M20 6 C24 12 24 18 20 22 C16 18 16 12 20 6Z"/>
+    <path class="petal" d="M8 14 C15 14 19 18 20 23 C14 24 9 20 8 14Z"/>
+    <path class="petal" d="M32 14 C25 14 21 18 20 23 C26 24 31 20 32 14Z"/>
+    <path class="petal inner" d="M12 24 C16 21 20 21 20 26 C20 30 15 30 12 24Z"/>
+    <path class="petal inner" d="M28 24 C24 21 20 21 20 26 C20 30 25 30 28 24Z"/>
+    <circle class="core" cx="20" cy="25" r="4"/>
+  </svg>`;
+}
+function buildLotusRows(){
+  ["db-lotus","ws-lotus"].forEach(id=>{
+    const row = $(id);
+    for(let i=0;i<9;i++){
+      const d = document.createElement("div");
+      d.className = "lotus"; d.innerHTML = lotusSVG();
+      row.appendChild(d);
+    }
+  });
+}
+function paintLotus(rowId, total, animateIdx){
+  const bloomed = Math.min(9, Math.floor(total/9));
+  const lotuses = $(rowId).querySelectorAll(".lotus");
+  lotuses.forEach((l,i)=>{
+    const should = i < bloomed;
+    if (should && !l.classList.contains("bloom")){
+      l.classList.add("bloom");
+    } else if (!should){
+      l.classList.remove("bloom");
+    }
+  });
+}
+
+/* ---------- 畫面更新 ---------- */
+function fmtNeed(remain){
+  const d = daysLeft();
+  if (remain <= 0) return `<span class="done-txt">已圓滿 🙏</span>`;
+  if (d <= 0) return `已過期限 · 尚餘 <b>${remain}</b> 遍`;
+  const avg = remain / d;
+  const disp = (avg % 1 === 0) ? avg : avg.toFixed(1);
+  return `每日需 <b>${disp}</b> 遍`;
+}
+function render(){
+  const {db,ws} = totals();
+  const d = daysLeft();
+  $("countdown").innerHTML = d > 0
+    ? `距 7/26 圓滿日尚有 <b>${d}</b> 天`
+    : (db>=TARGET && ws>=TARGET ? `功德圓滿 🙏` : `已過 7/26 圓滿日`);
+
+  $("db-total").textContent = db;
+  $("ws-total").textContent = ws;
+  $("db-bar").style.width = Math.min(100, db/TARGET*100)+"%";
+  $("ws-bar").style.width = Math.min(100, ws/TARGET*100)+"%";
+  $("db-remain").textContent = db>=TARGET ? "八十一遍圓滿" : `尚餘 ${TARGET-db} 遍`;
+  $("ws-remain").textContent = ws>=TARGET ? "八十一遍圓滿" : `尚餘 ${TARGET-ws} 遍`;
+  $("db-need").innerHTML = fmtNeed(TARGET-db);
+  $("ws-need").innerHTML = fmtNeed(TARGET-ws);
+  paintLotus("db-lotus", db);
+  paintLotus("ws-lotus", ws);
+  renderLog();
+}
+function renderLog(){
+  const log = $("log");
+  const dates = Object.keys(data.entries).sort().reverse();
+  if (!dates.length){ log.innerHTML = `<div class="log-empty">尚無紀錄，今日即可開始。</div>`; return; }
+  const wk = ["日","一","二","三","四","五","六"];
+  log.innerHTML = dates.map(dt=>{
+    const e = data.entries[dt];
+    const w = wk[new Date(dt+"T00:00:00").getDay()];
+    return `<li data-date="${dt}">
+      <span class="d">${dt.slice(5).replace("-","/")}<small>週${w}</small></span>
+      <span class="n">
+        <span class="c1">大悲咒 <b>${e.db}</b></span>
+        <span class="c2">往生咒 <b>${e.ws}</b></span>
+      </span>
+    </li>`;
+  }).join("");
+  log.querySelectorAll("li").forEach(li=>{
+    li.addEventListener("click", ()=>{
+      const dt = li.dataset.date, e = data.entries[dt];
+      $("entry-date").value = dt;
+      $("in-db").value = e.db; $("in-ws").value = e.ws;
+      syncForm();
+      const card = document.querySelector(".entry-card");
+      card.scrollIntoView({behavior:"smooth", block:"center"});
+      card.classList.add("flash");
+      setTimeout(()=>card.classList.remove("flash"), 1200);
+    });
+  });
+}
+
+/* ---------- 獎勵 ---------- */
+const PHRASES = [
+  "一筆一畫，皆是修行。",
+  "字字莊嚴，念念清淨。",
+  "精進不懈，福慧增長。",
+  "隨喜讚嘆今日的堅持。",
+  "以筆為香，供養十方。",
+  "心誠字正，功不唐捐。"
+];
+function dropPetals(n, grand){
+  const chars = grand ? ["🪷","✨","🌸"] : ["🌸","🪷"];
+  for(let i=0;i<n;i++){
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.textContent = chars[Math.floor(Math.random()*chars.length)];
+    p.style.left = Math.random()*96 + "vw";
+    p.style.fontSize = (16 + Math.random()*16) + "px";
+    p.style.animationDuration = (2.6 + Math.random()*2.4) + "s";
+    p.style.animationDelay = (Math.random()*0.9) + "s";
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(), 6500);
+  }
+}
+function showReward(kind, addDb, addWs, newLotusDb, newLotusWs){
+  const box = $("reward");
+  box.classList.toggle("grand", kind==="grand");
+  if (kind==="grand"){
+    $("seal").textContent = "圓滿";
+    $("r-title").textContent = "功德圓滿";
+    $("r-msg").textContent = "大悲咒、往生咒各八十一遍\n悉皆圓滿，隨喜讚嘆！";
+    $("r-sub").textContent = "願以此功德，回向十方法界。";
+    dropPetals(36, true);
+  } else if (kind==="lotus"){
+    const parts = [];
+    if (newLotusDb>0) parts.push(`大悲咒第 ${Math.floor(totals().db/9)} 品`);
+    if (newLotusWs>0) parts.push(`往生咒第 ${Math.floor(totals().ws/9)} 品`);
+    $("seal").textContent = "蓮開";
+    $("r-title").textContent = "蓮台又開一品";
+    $("r-msg").textContent = parts.join("、") + " 蓮花綻放 🪷";
+    $("r-sub").textContent = PHRASES[Math.floor(Math.random()*PHRASES.length)];
+    dropPetals(22, false);
+  } else {
+    $("seal").textContent = "精進";
+    $("r-title").textContent = "今日功課已記";
+    const items = [];
+    if (addDb>0) items.push(`大悲咒 ${addDb} 遍`);
+    if (addWs>0) items.push(`往生咒 ${addWs} 遍`);
+    $("r-msg").textContent = items.length ? items.join(" · ") : "紀錄已更新";
+    $("r-sub").textContent = PHRASES[Math.floor(Math.random()*PHRASES.length)];
+    dropPetals(12, false);
+  }
+  box.classList.add("show");
+}
+$("r-close").addEventListener("click", ()=> $("reward").classList.remove("show"));
+
+/* ---------- 輸入 ---------- */
+function syncForm(){
+  const dt = $("entry-date").value;
+  const exists = !!data.entries[dt];
+  const label = dt === todayStr() ? "今日" : dt.slice(5).replace("-","/");
+  $("save").textContent = exists ? `更新 ${label} 紀錄` : `記錄${dt===todayStr()?"今日":" "+label}功課`;
+  $("del").classList.toggle("show", exists);
+}
+document.querySelectorAll(".stepper button").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    const inp = $(b.dataset.t === "db" ? "in-db" : "in-ws");
+    inp.value = Math.max(0, (parseInt(inp.value)||0) + parseInt(b.dataset.d));
+  });
+});
+$("entry-date").addEventListener("change", ()=>{
+  const e = data.entries[$("entry-date").value];
+  $("in-db").value = e ? e.db : 0;
+  $("in-ws").value = e ? e.ws : 0;
+  syncForm();
+});
+$("del").addEventListener("click", ()=>{
+  const dt = $("entry-date").value;
+  if (!dt || !data.entries[dt]) return;
+  delete data.entries[dt];
+  save();
+  $("in-db").value = 0; $("in-ws").value = 0;
+  render(); syncForm();
+});
+$("save").addEventListener("click", async ()=>{
+  const dt = $("entry-date").value;
+  if (!dt) return;
+  const db = Math.max(0, parseInt($("in-db").value)||0);
+  const ws = Math.max(0, parseInt($("in-ws").value)||0);
+
+  const before = totals();
+  if (db===0 && ws===0) delete data.entries[dt];
+  else data.entries[dt] = {db, ws};
+  save(); // 背景儲存（失敗會自動重試）
+  const after = totals();
+  render();
+
+  const grand = after.db>=TARGET && after.ws>=TARGET && !(before.db>=TARGET && before.ws>=TARGET);
+  const newLotusDb = Math.floor(Math.min(after.db,TARGET)/9) - Math.floor(Math.min(before.db,TARGET)/9);
+  const newLotusWs = Math.floor(Math.min(after.ws,TARGET)/9) - Math.floor(Math.min(before.ws,TARGET)/9);
+
+  syncForm();
+  if (grand) showReward("grand");
+  else if (newLotusDb>0 || newLotusWs>0) showReward("lotus", db, ws, newLotusDb, newLotusWs);
+  else showReward("daily", after.db-before.db, after.ws-before.ws);
+});
+
+/* ---------- 備份與還原 ---------- */
+$("bk-copy").addEventListener("click", async ()=>{
+  const code = JSON.stringify(data);
+  const ta = $("bk-text");
+  ta.classList.add("show"); ta.value = code;
+  try{
+    await navigator.clipboard.writeText(code);
+    $("bk-hint").textContent = "✓ 已複製到剪貼簿，建議貼到備忘錄保存。";
+  }catch(e){
+    ta.focus(); ta.select();
+    $("bk-hint").textContent = "請長按上方文字全選複製，貼到備忘錄保存。";
+  }
+});
+$("bk-restore").addEventListener("click", ()=>{
+  const ta = $("bk-text");
+  if (!ta.classList.contains("show")){ ta.classList.add("show"); ta.value=""; ta.focus();
+    $("bk-hint").textContent = "請把備份碼貼進上方欄位，再按一次「貼上還原」。"; return; }
+  try{
+    const obj = JSON.parse(ta.value.trim());
+    if (!obj || typeof obj.entries !== "object") throw new Error();
+    data = obj; save(); render(); syncForm();
+    $("bk-hint").textContent = "✓ 還原完成。";
+  }catch(e){
+    $("bk-hint").textContent = "備份碼格式不正確，請確認是否完整貼上。";
+  }
+});
+
+/* ---------- 啟動 ---------- */
+(async function init(){
+  buildLotusRows();
+  $("entry-date").value = todayStr();
+  await load();
+  const e = data.entries[todayStr()];
+  if (e){ $("in-db").value = e.db; $("in-ws").value = e.ws; }
+  render(); syncForm();
+})();
+</script>
+</body>
+</html>
